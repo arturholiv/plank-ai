@@ -29,3 +29,7 @@ Frontend
 - A chat History;
 - Change the code language
 - Make the app bilingual to portuguese and english
+
+## Code repository
+
+https://github.com/arturholiv/plank-ai
