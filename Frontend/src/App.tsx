@@ -1,14 +1,11 @@
 import React from 'react';
 import './App.css';
+import Main from './Pages/Main/Main.tsx';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          Plank AI
-        </p>
-      </header>
+      <Main />
     </div>
   );
 }
