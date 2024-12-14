@@ -11,7 +11,7 @@ body {
   }
   
   .container {
-    max-width: 800px;
+    width: 800px;
     background-color: #ffffff;
     padding: 30px;
     border-radius: 10px;
@@ -25,7 +25,7 @@ body {
     font-size: 2.5rem;
     margin-bottom: 20px;
     font-weight: bold;
-    background: linear-gradient(90deg, #ffa800, #ff4500);
+    background: linear-gradient(90deg, #13b9be, #6200ff);
     -webkit-background-clip: text;
     color: transparent;
     text-align: center;
@@ -36,7 +36,7 @@ body {
     font-size: 1.5rem;
     margin-bottom: 20px;
     font-weight: bold;
-    background: linear-gradient(90deg, #ffa800, #ff4500);
+    background: linear-gradient(90deg, #13b9be, #6200ff);
     -webkit-background-clip: text;
     color: transparent;
     text-align: center;
@@ -45,10 +45,27 @@ body {
   h4 {
     font-size: 1.5rem;
     font-weight: bold;
-    background: linear-gradient(90deg, #ffa800, #ff4500);
+    background: linear-gradient(90deg, #ec6002, #ff4500);
     -webkit-background-clip: text;
     color: transparent;
     text-align: center;
+  }
+
+  .error-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    background: linear-gradient(90deg, #d43301, #ff4500);
+    -webkit-background-clip: text;
+    color: transparent;
+    text-align: center;
+  }
+
+  .error-message {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #000;
+    text-align: center;
+    margin-bottom: 15px;
   }
 
   .codeInput {
@@ -71,6 +88,11 @@ body {
   .form-control:focus {
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+
+  .response {
+    text-align: left;
+    margin: 20px;
   }
   
   textarea {
@@ -129,11 +151,54 @@ body {
     border: 1px solid #ccc;
     text-align: left;
   }
-  
 
+  .closeButton {
+    background-color: transparent;
+    color: #888;
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    right: 10px;
+    top: 10px;
+  }
+  
+  .closeIcon {
+    font-size: 1.5rem;
+    color: #888;
+  }
+  
+  .closeButton:hover .closeIcon {
+    color: #000;
+    background-color: transparent;
+    border-radius: 5px;
+  }
+  
+  .closeButton:hover {
+    border-color: transparent;
+  }
+
+  .error-message {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #000;
+    text-align: center;
+    background-color: #f8d7da;
+    border-radius: 5px;
+    padding: 10px;
+    border: 1px solid #ff4500;
+    margin: 15px;
+  }
+  
   @media (max-width: 768px) {
     .container {
       padding: 20px;
+      width: 80%;
+      margin: 0 auto;
     }
   
     h1 {
