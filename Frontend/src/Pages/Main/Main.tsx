@@ -20,9 +20,16 @@ const Main = () => {
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
+    setButtonStatus("loading");
+    setExplanation(null);
+    setRefactoredCode(null);
+    setReasoning(null);
+    setResponse(null);
+    setShowResponse(false);
+
     try {
-      setButtonStatus("loading");
       console.log("code: ", code);
+  
       const response = await axios.post(`${API_URL}/codeEnhancement`, { code });
       console.log("response: ", response);
 
@@ -30,6 +37,7 @@ const Main = () => {
       const resultJson = JSON.parse(resultString);
   
       const { explanation, refactored_code, reasoning, error } = resultJson;
+  
       if (explanation && refactored_code && reasoning) {
         setShowResponse(true);
         setRefactoredCode(refactored_code);
@@ -40,10 +48,13 @@ const Main = () => {
         setResponse(error);
         setShowResponse(true);
       }
-    } catch (err) {
-      setError('There was an error processing the code.');
+    } catch (err: any) {
+      const errorMessage =
+        err.response?.data?.message ||
+        err.message ||
+        "An unexpected error occurred. Please try again later.";
+      setError(errorMessage);
       setButtonStatus("error");
-      setTimeout(() => setButtonStatus("default"), 5000);
     } finally {
       setTimeout(() => setButtonStatus("default"), 5000);
       setLoading(false);
@@ -149,7 +160,6 @@ const Main = () => {
               <Button
                 variant="primary"
                 onClick={copyToClipboard}
-                disabled={loading || code.length === 0}
                 className={`d-flex align-items-center justify-content-center ${buttonCopyStatus}`}
                 style={{
                     marginTop: "20px",
@@ -176,9 +186,7 @@ const Main = () => {
                             ? "borderShrink 4s linear"
                             : "none",
               }}>
-                {loading ? (
-                    "Loading..."
-                ) : buttonCopyStatus === "success" ? (
+                {buttonCopyStatus === "success" ? (
                     "Copied to clipboard!"
                 ) : buttonCopyStatus === "error" ? (
                     "Error copying to clipboard"
