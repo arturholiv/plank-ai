@@ -15,6 +15,7 @@ Rules:
 - You cannot change the logic of the code.
 - Always return the response in JSON format. Only return the JSON, no other text or comments outside the JSON.
 - The JSON should have the following keys: explanation, refactored_code, reasoning.
+- If the code is not valid, return only the error message in the JSON in the key "error". Only return the JSON, no other text or comments outside the JSON
 `;
 
 if (!process.env.OPENAI_API_KEY) {
