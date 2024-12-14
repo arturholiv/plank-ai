@@ -208,8 +208,8 @@ const Main = () => {
         {response && (
           <Row className="mt-4">
             <Col>
-              <h4>Something went wrong</h4>
-              <div>{response}</div>
+              <h4 className="error-title">Something went wrong</h4>
+              <div className="error-message">{response}</div>
             </Col>
           </Row>
         )}
