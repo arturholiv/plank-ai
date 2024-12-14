@@ -104,6 +104,7 @@ body {
   }
   
   .codeResult {
+    margin-top: 20px;
     background-color: #f8f9fa;
     padding: 15px;
     border-radius: 10px;
@@ -113,6 +114,19 @@ body {
     white-space: pre-wrap;
     word-wrap: break-word;
   }
+
+  .refactoredCode {
+    background-color: #212121;
+    color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: 'Courier New', Courier, monospace;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    border: 1px solid #ccc;
+    text-align: left;
+  }
+  
 
   @media (max-width: 768px) {
     .container {

@@ -6,10 +6,13 @@ import API_URL from '../../config.ts';
 
 const Main = () => {
   const [code, setCode] = useState<string>('');
-  const [refactoredCode, setRefactoredCode] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [explanation, setExplanation] = useState<string | null>(null);
+  const [refactoredCode, setRefactoredCode] = useState<string | null>(null);
+  const [reasoning, setReasoning] = useState<string | null>(null);
   const [buttonStatus, setButtonStatus] = useState("default");
+  const [buttonCopyStatus, setButtonCopyStatus] = useState("default");
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -19,8 +22,15 @@ const Main = () => {
       console.log("code: ", code);
       const response = await axios.post(`${API_URL}/codeEnhancement`, { code });
       console.log("response: ", response);
-      const refactoredCode = response.data.result;
-      setRefactoredCode(refactoredCode);
+
+      const resultString = response.data.result.trim(); 
+      const resultJson = JSON.parse(resultString);
+  
+      const { explanation, refactored_code, reasoning } = resultJson;
+  
+      setRefactoredCode(refactored_code);
+      setExplanation(explanation);
+      setReasoning(reasoning);
       setButtonStatus("success");
       setTimeout(() => setButtonStatus("default"), 5000);
     } catch (err) {
@@ -29,6 +39,14 @@ const Main = () => {
       setTimeout(() => setButtonStatus("default"), 5000);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const copyToClipboard = () => {
+    if (refactoredCode) {
+      navigator.clipboard.writeText(refactoredCode);
+      setButtonCopyStatus("success");
+      setTimeout(() => setButtonCopyStatus("default"), 5000);
     }
   };
 
@@ -105,14 +123,72 @@ const Main = () => {
           </Col>
         </Row>
       )}
-      {refactoredCode && (
-        <Row className="mt-4">
-          <Col>
-            <h4>Refactored Code</h4>
-            <div className="codeResult">{refactoredCode}</div>
-          </Col>
-        </Row>
-      )}
+      <div className="codeResult">
+        {explanation && (
+          <Row className="mt-4">
+            <Col>
+              <h4>Explanation</h4>
+              <div>{explanation}</div>
+            </Col>
+          </Row>
+        )}
+        {refactoredCode && (
+          <Row className="mt-4">
+            <Col>
+              <h4>Refactored Code</h4>
+              <pre className="refactoredCode">{refactoredCode}</pre>
+              <Button
+                variant="primary"
+                onClick={copyToClipboard}
+                disabled={loading || code.length === 0}
+                className={`d-flex align-items-center justify-content-center ${buttonCopyStatus}`}
+                style={{
+                    marginTop: "20px",
+                    borderRadius: "27px",
+                    fontWeight: "bold",
+                    transition: "all 0.3s ease",
+                    backgroundColor:
+                        buttonCopyStatus === "success"
+                            ? "#4CBB17"
+                            : buttonCopyStatus === "error"
+                            ? "red"
+                            : "",
+                    borderColor:
+                        buttonCopyStatus === "success"
+                            ? "#4CBB17"
+                            : buttonCopyStatus === "error"
+                            ? "red"
+                            : "",
+                    borderWidth: "2px",
+                    borderStyle: "solid",
+                    animation:
+                        buttonCopyStatus === "success" ||
+                        buttonCopyStatus === "error"
+                            ? "borderShrink 4s linear"
+                            : "none",
+              }}>
+                {loading ? (
+                    "Loading..."
+                ) : buttonCopyStatus === "success" ? (
+                    "Copied to clipboard!"
+                ) : buttonCopyStatus === "error" ? (
+                    "Error copying to clipboard"
+                ) : (
+                    "Copy to clipboard"
+                )}
+            </Button>
+            </Col>
+          </Row>
+        )}
+        {reasoning && (
+          <Row className="mt-4">
+            <Col>
+              <h4>Reasoning</h4>
+              <div>{reasoning}</div>
+            </Col>
+          </Row>
+        )}
+      </div>
     </Container>
   );
 };
