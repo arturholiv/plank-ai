@@ -36,8 +36,10 @@ COPY --from=build /app /app
 # Install `tsx` for runtime execution (since it's part of your devDependencies)
 RUN npm install -g tsx
 
+ENV OPENAI_API_KEY=
+
 # Expose the desired port
-EXPOSE 8787
+EXPOSE 8080
 
 # Start the server using tsx as defined in your package.json
 CMD [ "tsx", "watch", "src/server.ts" ]
