@@ -26,10 +26,16 @@ Frontend
 
 ## Features i would add in this project
 
-- A chat History;
-- Change the code language
 - Make the app bilingual to portuguese and english
+- Possibility to change the code language
+- A chat History;
 
 ## Code repository
 
 https://github.com/arturholiv/plank-ai
+
+## Deploy
+
+I also deployed the project and wil be adding new features to it.
+
+https://plankai.arturholiv.com.br/
