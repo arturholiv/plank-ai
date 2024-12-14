@@ -145,7 +145,7 @@ const Main = () => {
       { showResponse && (
         <div className="codeResult">
           {explanation && (
-            <Row className="mt-4">
+            <Row className="mt-4 response">
             <Col>
               <h4>Explanation</h4>
               <div>{explanation}</div>
@@ -198,7 +198,7 @@ const Main = () => {
           </Row>
         )}
         {reasoning && (
-          <Row className="mt-4">
+          <Row className="mt-4 response">
             <Col>
               <h4>Reasoning</h4>
               <div>{reasoning}</div>
