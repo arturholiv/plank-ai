@@ -76,6 +76,9 @@ body {
   textarea {
     min-height: 200px;
     max-height: 400px;
+    overflow-y: auto;
+    max-width: 100%;
+    min-width: 50%;
   }
   
   button {
