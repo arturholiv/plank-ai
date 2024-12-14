@@ -1,0 +1,43 @@
+# syntax = docker/dockerfile:1
+
+# Adjust NODE_VERSION as desired
+ARG NODE_VERSION=20.11.1
+FROM node:${NODE_VERSION}-slim as base
+
+LABEL fly_launch_runtime="Node.js"
+
+# Node.js app lives here
+WORKDIR /app
+
+# Set production environment
+ENV NODE_ENV="production"
+
+# Throw-away build stage to reduce size of final image
+FROM base as build
+
+# Install packages needed to build node modules
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
+
+# Install node modules
+COPY package*.json ./
+
+RUN npm ci
+
+# Copy application code
+COPY . .
+
+# Final stage for app image
+FROM base
+
+# Install dependencies in the final image (for runtime)
+COPY --from=build /app /app
+
+# Install `tsx` for runtime execution (since it's part of your devDependencies)
+RUN npm install -g tsx
+
+# Expose the desired port
+EXPOSE 8787
+
+# Start the server using tsx as defined in your package.json
+CMD [ "tsx", "watch", "src/server.ts" ]
