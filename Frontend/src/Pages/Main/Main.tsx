@@ -13,6 +13,8 @@ const Main = () => {
   const [reasoning, setReasoning] = useState<string | null>(null);
   const [buttonStatus, setButtonStatus] = useState("default");
   const [buttonCopyStatus, setButtonCopyStatus] = useState("default");
+  const [response, setResponse] = useState<string | null>(null);
+  const [showResponse, setShowResponse] = useState<boolean>(false);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -26,18 +28,23 @@ const Main = () => {
       const resultString = response.data.result.trim(); 
       const resultJson = JSON.parse(resultString);
   
-      const { explanation, refactored_code, reasoning } = resultJson;
-  
-      setRefactoredCode(refactored_code);
-      setExplanation(explanation);
-      setReasoning(reasoning);
-      setButtonStatus("success");
-      setTimeout(() => setButtonStatus("default"), 5000);
+      const { explanation, refactored_code, reasoning, error } = resultJson;
+      if (explanation && refactored_code && reasoning) {
+        setShowResponse(true);
+        setRefactoredCode(refactored_code);
+        setExplanation(explanation);
+        setReasoning(reasoning);
+        setButtonStatus("success");
+      } else if (error) {
+        setResponse(error);
+        setShowResponse(true);
+      }
     } catch (err) {
       setError('There was an error processing the code.');
       setButtonStatus("error");
       setTimeout(() => setButtonStatus("default"), 5000);
     } finally {
+      setTimeout(() => setButtonStatus("default"), 5000);
       setLoading(false);
     }
   };
@@ -106,7 +113,7 @@ const Main = () => {
             {loading ? (
                 "Loading..."
             ) : buttonStatus === "success" ? (
-                "Code Sent!"
+                "Success!"
             ) : buttonStatus === "error" ? (
                 "Error processing code"
             ) : (
@@ -123,9 +130,10 @@ const Main = () => {
           </Col>
         </Row>
       )}
-      <div className="codeResult">
-        {explanation && (
-          <Row className="mt-4">
+      { showResponse && (
+        <div className="codeResult">
+          {explanation && (
+            <Row className="mt-4">
             <Col>
               <h4>Explanation</h4>
               <div>{explanation}</div>
@@ -188,7 +196,16 @@ const Main = () => {
             </Col>
           </Row>
         )}
+        {response && (
+          <Row className="mt-4">
+            <Col>
+              <h4>Something went wrong</h4>
+              <div>{response}</div>
+            </Col>
+          </Row>
+        )}
       </div>
+      )}
     </Container>
   );
 };
