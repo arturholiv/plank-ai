@@ -13,6 +13,8 @@ Rules:
 - You cannot change the structure of the code, unless explicitly requested.
 - You cannot change the language of the code, unless explicitly requested.
 - You cannot change the logic of the code.
+- Always return the response in JSON format. Only return the JSON, no other text or comments outside the JSON.
+- The JSON should have the following keys: explanation, refactored_code, reasoning.
 `;
 
 if (!process.env.OPENAI_API_KEY) {
