@@ -181,6 +181,18 @@ body {
   .closeButton:hover {
     border-color: transparent;
   }
+
+  .error-message {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #000;
+    text-align: center;
+    background-color: #f8d7da;
+    border-radius: 5px;
+    padding: 10px;
+    border: 1px solid #ff4500;
+    margin: 15px;
+  }
   
   @media (max-width: 768px) {
     .container {

@@ -149,7 +149,7 @@ const Main = () => {
       {error && (
         <Row className="mt-3">
           <Col>
-            <Alert variant="danger">{error}</Alert>
+            <Alert variant="danger" className="error-message">{error}</Alert>
           </Col>
         </Row>
       )}
