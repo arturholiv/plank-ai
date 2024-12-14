@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import './Main.css';
 import API_URL from '../../config.ts';
+import GitHub from '../../Component/Github/Github.tsx';
 
 const Main = () => {
   const [code, setCode] = useState<string>('');
@@ -206,6 +207,7 @@ const Main = () => {
         )}
       </div>
       )}
+      <GitHub />
     </Container>
   );
 };
