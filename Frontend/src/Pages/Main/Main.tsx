@@ -4,6 +4,7 @@ import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 import './Main.css';
 import API_URL from '../../config.ts';
 import GitHub from '../../Component/Github/Github.tsx';
+import { RiCloseCircleFill } from 'react-icons/ri';
 
 const Main = () => {
   const [code, setCode] = useState<string>('');
@@ -68,6 +69,16 @@ const Main = () => {
       setTimeout(() => setButtonCopyStatus("default"), 5000);
     }
   };
+
+  const closeResponse = () => {
+    setError(null);
+    setExplanation(null);
+    setRefactoredCode(null);
+    setReasoning(null);
+    setResponse(null);
+    setShowResponse(false);
+    setCode("");
+  }
 
   return (
     <Container>
@@ -144,6 +155,11 @@ const Main = () => {
       )}
       { showResponse && (
         <div className="codeResult">
+        <div>
+            <Button className="closeButton" onClick={closeResponse}>
+                <RiCloseCircleFill className="closeIcon" />
+            </Button>
+        </div>
           {explanation && (
             <Row className="mt-4 response">
             <Col>

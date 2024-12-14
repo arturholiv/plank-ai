@@ -151,8 +151,37 @@ body {
     border: 1px solid #ccc;
     text-align: left;
   }
-  
 
+  .closeButton {
+    background-color: transparent;
+    color: #888;
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    right: 10px;
+    top: 10px;
+  }
+  
+  .closeIcon {
+    font-size: 1.5rem;
+    color: #888;
+  }
+  
+  .closeButton:hover .closeIcon {
+    color: #000;
+    background-color: transparent;
+    border-radius: 5px;
+  }
+  
+  .closeButton:hover {
+    border-color: transparent;
+  }
+  
   @media (max-width: 768px) {
     .container {
       padding: 20px;
