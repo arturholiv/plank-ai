@@ -5,8 +5,13 @@ import cors from 'cors';
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: ['http://localhost:3000', 'https://plankai.arturholiv.com.br/'],
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type']
+}));
 dotenv.config();
+const PORT = process.env.PORT || 8080;
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World');
@@ -29,6 +34,6 @@ app.post('/codeEnhancement', async (req: Request, res: Response): Promise<void> 
     }
   });
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server is running on port ${process.env.PORT}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
