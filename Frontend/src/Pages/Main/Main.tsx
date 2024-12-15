@@ -102,7 +102,7 @@ const Main = () => {
         <Col>
           <Form>
             <Form.Group className="codeInput">
-              <Form.Label>Enter your code</Form.Label>
+              <Form.Label>Enter your code to be explained and refactored</Form.Label>
               <Form.Control
                 className="form-control"
                 as="textarea"
