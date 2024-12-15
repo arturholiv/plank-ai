@@ -33,28 +33,36 @@ const Main = () => {
   
       const response = await axios.post(`${API_URL}/codeEnhancement`, { code });
       console.log("response: ", response);
-
-      const resultString = response.data.result.trim(); 
-      const resultJson = JSON.parse(resultString);
   
-      const { explanation, refactored_code, reasoning, error } = resultJson;
+      if (response.data?.result) {
+        const resultString = response.data.result.trim(); 
+        const resultJson = JSON.parse(resultString);
   
-      if (explanation && refactored_code && reasoning) {
+        const { explanation, refactored_code, reasoning, error } = resultJson;
+  
+        if (explanation && refactored_code && reasoning) {
+          setShowResponse(true);
+          setRefactoredCode(refactored_code);
+          setExplanation(explanation);
+          setReasoning(reasoning);
+          setButtonStatus("success");
+        } else if (error) {
+          setResponse(error);
+          setShowResponse(true);
+          setButtonStatus("error");
+        }
+      } else {
+        setResponse("No result returned from the server.");
         setShowResponse(true);
-        setRefactoredCode(refactored_code);
-        setExplanation(explanation);
-        setReasoning(reasoning);
-        setButtonStatus("success");
-      } else if (error) {
-        setResponse(error);
-        setShowResponse(true);
+        setButtonStatus("error");
       }
     } catch (err: any) {
-      const errorMessage =
-        err.response?.data?.message ||
-        err.message ||
+      const errorMessage = 
+        err.response?.data?.error || 
+        err.message || 
         "An unexpected error occurred. Please try again later.";
-      setError(errorMessage);
+      const errorStatus = err.response?.status || 500;
+      setError("Error " + errorStatus + ": \n\n" + errorMessage);
       setButtonStatus("error");
     } finally {
       setTimeout(() => setButtonStatus("default"), 5000);

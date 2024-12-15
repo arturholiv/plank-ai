@@ -204,6 +204,9 @@ body {
     padding: 10px;
     border: 1px solid #ff4500;
     margin: 15px;
+    margin-top: 10px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
   }
   
   @media (max-width: 768px) {
