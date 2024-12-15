@@ -208,6 +208,18 @@ body {
     word-wrap: break-word;
     white-space: pre-wrap;
   }
+
+  .error-container {
+    margin-top: 20px;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 1rem;
+    color: #333;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
   
   @media (max-width: 768px) {
     .container {

@@ -17,6 +17,7 @@ const Main = () => {
   const [buttonCopyStatus, setButtonCopyStatus] = useState("default");
   const [response, setResponse] = useState<string | null>(null);
   const [showResponse, setShowResponse] = useState<boolean>(false);
+  const [errorStatus, setErrorStatus] = useState<number | null>(null);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -62,7 +63,8 @@ const Main = () => {
         err.message || 
         "An unexpected error occurred. Please try again later.";
       const errorStatus = err.response?.status || 500;
-      setError("Error " + errorStatus + ": \n\n" + errorMessage);
+      setErrorStatus(errorStatus);
+      setError(errorMessage);
       setButtonStatus("error");
     } finally {
       setTimeout(() => setButtonStatus("default"), 5000);
@@ -155,11 +157,19 @@ const Main = () => {
         </Col>
       </Row>
       {error && (
-        <Row className="mt-3">
-          <Col>
-            <Alert variant="danger" className="error-message">{error}</Alert>
-          </Col>
-        </Row>
+        <div className="error-container">
+            <div>
+                <Button className="closeButton" onClick={closeResponse}>
+                    <RiCloseCircleFill className="closeIcon" />
+                </Button>
+            </div>
+            <Row className="mt-3">
+                <h4 className="error-title">Error: {errorStatus}</h4>
+                <Col>
+                    <Alert variant="danger" className="error-message">{error}</Alert>
+                </Col>
+            </Row>
+        </div>
       )}
       { showResponse && (
         <div className="codeResult">
