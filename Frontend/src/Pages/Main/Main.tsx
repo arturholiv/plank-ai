@@ -140,7 +140,7 @@ const Main = () => {
             ) : buttonStatus === "error" ? (
                 "Error processing code"
             ) : (
-                "Send code"
+                "Submit"
             )}
             </Button>
           </Form>
