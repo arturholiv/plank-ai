@@ -23,16 +23,19 @@ app.post('/codeEnhancement', async (req: Request, res: Response): Promise<void> 
     const { code } = req.body;
   
     if (!code) {
-      res.status(400).send({ error: "the field 'code' is required." });
+      res.status(400).json({ error: "The field 'code' is required." });
       return;
     }
   
     try {
       const response = await enhanceCode(code);
-      res.send({ result: response });
+      res.json({ result: response });
     } catch (error: any) {
-      console.error("Error processing code:", error.message);
-      res.status(500).send({ error: "Error enhancing code." });
+      if (error.message) {
+        res.status(error.status).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: "An unexpected error occurred while enhancing the code." });
+      }
     }
   });
 

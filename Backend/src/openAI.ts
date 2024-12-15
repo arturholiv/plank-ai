@@ -1,5 +1,6 @@
 import OpenAI from 'openai';
 import * as dotenv from "dotenv";
+import { ErrorOpenAI } from '../types/ErrorOpenAI';
 
 dotenv.config();
 
@@ -16,6 +17,8 @@ Rules:
 - Always return the response in JSON format. Only return the JSON, no other text or comments outside the JSON.
 - The JSON should have the following keys: explanation, refactored_code, reasoning.
 - If the code is not valid, return only the error message in the JSON in the key "error". Only return the JSON, no other text or comments outside the JSON
+- If the code is invalid, incomplete, or non-functional, return a detailed error message explaining why the code cannot be processed in the 'error' key and no other content.
+  Ensure the error message is clear and looks like 'The provided code is incomplete and cannot be refactored due to missing functionality or syntax issues.'"
 `;
 
 if (!process.env.OPENAI_API_KEY) {
@@ -40,7 +43,12 @@ export async function enhanceCode(code: string): Promise<string> {
 
     return response.choices[0]?.message?.content?.trim() || "No response generated.";
   } catch (error: any) {
-    console.error("Error enhancing code:", error.message);
-    throw new Error("Failed to process code with OpenAI API");
+    if (error.status && error.error.message) {
+      const status = error.status;
+      const errorMessage = error.error.message || "Unknown error occurred";
+      throw new ErrorOpenAI(status, errorMessage);
+    } else {
+      throw new Error(`An unexpected error occurred: ${error.message || error}`);
+    }
   }
 }

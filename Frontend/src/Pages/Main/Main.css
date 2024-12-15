@@ -91,8 +91,16 @@ body {
   }
 
   .response {
+    font-size: 1.1rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #333;
     text-align: left;
-    margin: 20px;
+    margin: 10px 10px 20px 10px;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    padding: 10px 15px;
   }
   
   textarea {
@@ -141,16 +149,20 @@ body {
   }
 
   .refactoredCode {
-    background-color: #212121;
-    color: #ffffff;
-    padding: 10px;
-    border-radius: 5px;
-    font-family: 'Courier New', Courier, monospace;
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+    padding: 15px;
+    border-radius: 8px;
+    font-family: 'Fira Code', 'Courier New', monospace;
     white-space: pre-wrap;
     word-wrap: break-word;
-    border: 1px solid #ccc;
     text-align: left;
-  }
+    margin: 15px;
+    overflow-x: auto;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    font-size: 0.95rem;
+    line-height: 1.5; 
+}
 
   .closeButton {
     background-color: transparent;
@@ -192,6 +204,21 @@ body {
     padding: 10px;
     border: 1px solid #ff4500;
     margin: 15px;
+    margin-top: 10px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+  }
+
+  .error-container {
+    margin-top: 20px;
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 1rem;
+    color: #333;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
   }
   
   @media (max-width: 768px) {

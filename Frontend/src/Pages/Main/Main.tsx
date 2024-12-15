@@ -17,6 +17,7 @@ const Main = () => {
   const [buttonCopyStatus, setButtonCopyStatus] = useState("default");
   const [response, setResponse] = useState<string | null>(null);
   const [showResponse, setShowResponse] = useState<boolean>(false);
+  const [errorStatus, setErrorStatus] = useState<number | null>(null);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -29,31 +30,37 @@ const Main = () => {
     setShowResponse(false);
 
     try {
-      console.log("code: ", code);
-  
       const response = await axios.post(`${API_URL}/codeEnhancement`, { code });
-      console.log("response: ", response);
-
-      const resultString = response.data.result.trim(); 
-      const resultJson = JSON.parse(resultString);
   
-      const { explanation, refactored_code, reasoning, error } = resultJson;
+      if (response.data?.result) {
+        const resultString = response.data.result.trim(); 
+        const resultJson = JSON.parse(resultString);
   
-      if (explanation && refactored_code && reasoning) {
+        const { explanation, refactored_code, reasoning, error } = resultJson;
+  
+        if (explanation && refactored_code && reasoning) {
+          setShowResponse(true);
+          setRefactoredCode(refactored_code);
+          setExplanation(explanation);
+          setReasoning(reasoning);
+          setButtonStatus("success");
+        } else if (error) {
+          setResponse(error);
+          setShowResponse(true);
+          setButtonStatus("error");
+        }
+      } else {
+        setResponse("No result returned from the server.");
         setShowResponse(true);
-        setRefactoredCode(refactored_code);
-        setExplanation(explanation);
-        setReasoning(reasoning);
-        setButtonStatus("success");
-      } else if (error) {
-        setResponse(error);
-        setShowResponse(true);
+        setButtonStatus("error");
       }
     } catch (err: any) {
-      const errorMessage =
-        err.response?.data?.message ||
-        err.message ||
+      const errorMessage = 
+        err.response?.data?.error || 
+        err.message || 
         "An unexpected error occurred. Please try again later.";
+      const errorStatus = err.response?.status || 500;
+      setErrorStatus(errorStatus);
       setError(errorMessage);
       setButtonStatus("error");
     } finally {
@@ -66,7 +73,7 @@ const Main = () => {
     if (refactoredCode) {
       navigator.clipboard.writeText(refactoredCode);
       setButtonCopyStatus("success");
-      setTimeout(() => setButtonCopyStatus("default"), 5000);
+      setTimeout(() => setButtonCopyStatus("default"), 2500);
     }
   };
 
@@ -92,7 +99,7 @@ const Main = () => {
         <Col>
           <Form>
             <Form.Group className="codeInput">
-              <Form.Label>Enter your code</Form.Label>
+              <Form.Label>Enter your code to be explained and refactored</Form.Label>
               <Form.Control
                 className="form-control"
                 as="textarea"
@@ -140,18 +147,26 @@ const Main = () => {
             ) : buttonStatus === "error" ? (
                 "Error processing code"
             ) : (
-                "Send code"
+                "Submit"
             )}
             </Button>
           </Form>
         </Col>
       </Row>
       {error && (
-        <Row className="mt-3">
-          <Col>
-            <Alert variant="danger" className="error-message">{error}</Alert>
-          </Col>
-        </Row>
+        <div className="error-container">
+            <div>
+                <Button className="closeButton" onClick={closeResponse}>
+                    <RiCloseCircleFill className="closeIcon" />
+                </Button>
+            </div>
+            <Row className="mt-3">
+                <h4 className="error-title">Error: {errorStatus}</h4>
+                <Col>
+                    <Alert variant="danger" className="error-message">{error}</Alert>
+                </Col>
+            </Row>
+        </div>
       )}
       { showResponse && (
         <div className="codeResult">
