@@ -1,5 +1,6 @@
 import OpenAI from 'openai';
 import * as dotenv from "dotenv";
+import { ErrorOpenAI } from '../types/ErrorOpenAI';
 
 dotenv.config();
 
@@ -40,7 +41,12 @@ export async function enhanceCode(code: string): Promise<string> {
 
     return response.choices[0]?.message?.content?.trim() || "No response generated.";
   } catch (error: any) {
-    console.error("Error enhancing code:", error.message);
-    throw new Error("Failed to process code with OpenAI API");
+    if (error.status && error.error.message) {
+      const status = error.status;
+      const errorMessage = error.error.message || "Unknown error occurred";
+      throw new ErrorOpenAI(status, errorMessage);
+    } else {
+      throw new Error(`An unexpected error occurred: ${error.message || error}`);
+    }
   }
 }
