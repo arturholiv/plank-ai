@@ -30,10 +30,7 @@ const Main = () => {
     setShowResponse(false);
 
     try {
-      console.log("code: ", code);
-  
       const response = await axios.post(`${API_URL}/codeEnhancement`, { code });
-      console.log("response: ", response);
   
       if (response.data?.result) {
         const resultString = response.data.result.trim(); 
