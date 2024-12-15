@@ -66,7 +66,7 @@ const Main = () => {
     if (refactoredCode) {
       navigator.clipboard.writeText(refactoredCode);
       setButtonCopyStatus("success");
-      setTimeout(() => setButtonCopyStatus("default"), 5000);
+      setTimeout(() => setButtonCopyStatus("default"), 2500);
     }
   };
 
