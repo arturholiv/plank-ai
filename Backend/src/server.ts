@@ -6,10 +6,12 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://plankai.arturholiv.com.br/'],
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type']
+  origin: ['http://localhost:3000', 'https://plankai.arturholiv.com.br'],
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
+
 dotenv.config();
 const PORT = process.env.PORT || 8080;
 
