@@ -33,7 +33,7 @@ const Main = () => {
 
   const handleSubmit = async () => {
     if (code.trim() === '') return;
-    const userMessage = { type: 'user', title: "Me", content: code };
+    const userMessage = { type: 'user', title: "", content: code };
     setMessages(prev => [...prev, userMessage]);
     setLoading(true);
     setError(null);
@@ -153,7 +153,7 @@ const Main = () => {
                 ) : buttonStatus === "success" ? (
                   "Success!"
                 ) : buttonStatus === "error" ? (
-                  "Error processing code"
+                  "Error"
                 ) : (
                   "Submit"
                 )}
