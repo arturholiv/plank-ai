@@ -14,6 +14,9 @@ Backend
   npm install
   npm run dev
 ```
+The .env file is not included in the repository, so you will need to create it yourself based on the .env.example file in the Backend folder.
+
+Add the OPENAI_API_KEY to the .env file.
 
 Frontend
 
