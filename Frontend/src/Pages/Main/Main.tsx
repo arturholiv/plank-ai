@@ -86,7 +86,7 @@ const Main = () => {
   };
 
   return (
-    <Container>
+    <Container fluid>
       <Row className="mt-4">
         <Col>
           <h1>Plank AI</h1>
@@ -94,7 +94,7 @@ const Main = () => {
         </Col>
       </Row>
       <Row className="mt-3">
-        <Col>
+        <Col className="d-flex justify-content-center">
           <div className="chat-container">
             <div className="messages">
               {messages.map((msg, index) => (

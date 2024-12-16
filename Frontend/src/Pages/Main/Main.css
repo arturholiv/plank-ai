@@ -44,11 +44,9 @@ h1:last-child {
     display: flex;
     flex-direction: column;
     height: 80vh;
-    width: 800px;
+    width: 700px;
     background-color: #ffffff;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
 
@@ -113,6 +111,7 @@ h1:last-child {
     background-color: #007bff;
     color: white;
     cursor: pointer;
+    font-weight: bold;
     transition: background-color 0.3s ease;
 }
 
