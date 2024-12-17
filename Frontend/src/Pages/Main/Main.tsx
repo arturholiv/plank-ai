@@ -144,7 +144,14 @@ const Main = () => {
               <Form.Control
                 as="textarea"
                 value={code}
+                rows={3}
                 onChange={(e) => setCode(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSubmit();
+                  }
+                }}
                 placeholder="Paste your code here..."
               />
               <Button
