@@ -218,11 +218,11 @@ const Main = () => {
                             : "none",
               }}>
                 {buttonCopyStatus === "success" ? (
-                    "Copied to clipboard!"
+                    "Copied!"
                 ) : buttonCopyStatus === "error" ? (
-                    "Error copying to clipboard"
+                    "Error copying"
                 ) : (
-                    "Copy to clipboard"
+                    "Copy"
                 )}
             </Button>
             </Col>
