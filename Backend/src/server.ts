@@ -6,7 +6,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://plankai.arturholiv.com.br'],
+  origin: ['http://localhost:3000', 'https://plankai.arturholiv.com.br', 'https://plankaiv2.arturholiv.com.br'],
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
