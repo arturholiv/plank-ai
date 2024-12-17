@@ -39,6 +39,10 @@ https://github.com/arturholiv/plank-ai
 
 ## Deploy
 
-I also deployed the project and wil be adding new features to it.
+I also deployed the project on:
 
 https://plankai.arturholiv.com.br/
+
+And i will be adding some new features to it on:
+
+https://plankaiv2.arturholiv.com.br/
