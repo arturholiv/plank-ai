@@ -12,6 +12,7 @@ body {
 
 .container {
   width: 800px;
+  height: 800px;
   background-color: #ffffff;
   padding: 30px;
   border-radius: 10px;
@@ -45,8 +46,8 @@ h1:last-child {
 .chat-container {
   display: flex;
   flex-direction: column;
-  height: 70%;
-  width: 90%;
+  height: 600px;
+  width: 700px;
   background-color: #ffffff;
   border-radius: 20px;
   padding: 20px;
@@ -58,7 +59,7 @@ h1:last-child {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  height: calc(100% - 40px);
+  height: 90%;
   margin-bottom: 20px;
   width: 100%;
   padding: 0 15px;

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
-import ReactMarkdown from 'react-markdown';
 import './Main.css';
 import API_URL from '../../config.ts';
 import GitHub from '../../Component/Github/Github.tsx';
@@ -143,7 +142,6 @@ const Main = () => {
             <div className="input-container">
               <Form.Control
                 as="textarea"
-                rows={2}
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
                 placeholder="Paste your code here..."
