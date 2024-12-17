@@ -12,12 +12,30 @@ const Main = () => {
   const [buttonStatus, setButtonStatus] = useState("default");
   const [buttonCopyStatus, setButtonCopyStatus] = useState("default");
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [showPresentation, setShowPresentation] = useState(true);
 
   useEffect(() => {
     const storedMessages = localStorage.getItem('chatMessages');
     if (storedMessages) {
       setMessages(JSON.parse(storedMessages));
+    }
+
+    const presentationSent = localStorage.getItem('presentationSent');
+    if (!presentationSent) {
+      const message1 = { type: 'bot', title: "", content: "Hello." };
+      const message2 = { type: 'bot', title: "", content: "This is the Plank AI test. Made by Artur H. Oliveira." };
+      const message3 = { type: 'bot', title: "", content: "Feel free to paste your code here and get a refactored version of it." };
+
+      const timer1 = setTimeout(() => setMessages(prev => [...prev, message1]), 1000);
+      const timer2 = setTimeout(() => setMessages(prev => [...prev, message2]), 2000);
+      const timer3 = setTimeout(() => setMessages(prev => [...prev, message3]), 3000);
+
+      localStorage.setItem('presentationSent', 'true');
+
+      return () => {
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+        clearTimeout(timer3);
+      };
     }
   }, []);
 
@@ -25,28 +43,6 @@ const Main = () => {
     localStorage.setItem('chatMessages', JSON.stringify(messages));
     scrollToBottom();
   }, [messages]);
-
-  useEffect(() => {
-    if (showPresentation) {
-      const message1 = { type: 'bot', title: "", content: "Hello." };
-      const message2 = { type: 'bot', title: "", content: "This is the Plank AI test. Made by Artur H. Oliveira." };
-      const message3 = { type: 'bot', title: "", content: "Feel free to paste your code here and get a refactored version of it." };
-  
-      const timer1 = setTimeout(() => setMessages(prev => [...prev, message1]), 1000);
-      const timer2 = setTimeout(() => setMessages(prev => [...prev, message2]), 2000);
-      const timer3 = setTimeout(() => setMessages(prev => [...prev, message3]), 3000);
-  
-      setShowPresentation(false);
-
-      return () => {
-        clearTimeout(timer1);
-        clearTimeout(timer2);
-        clearTimeout(timer3);
-      };
-
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
