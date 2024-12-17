@@ -12,7 +12,7 @@ body {
 
 .container {
   width: 50vw;
-  height: 80vh;
+  height: 85vh;
   background-color: #ffffff;
   padding: 30px;
   border-radius: 10px;
@@ -65,6 +65,7 @@ h1:last-child {
   margin-bottom: 20px;
   width: 100%;
   padding: 0 15px;
+  box-sizing: border-box;
 }
 
 .message {
@@ -90,11 +91,12 @@ h1:last-child {
 }
 
 .message .bubble {
-  max-width: 70%;
+  max-width: 90%;
   padding: 10px 15px;
   border-radius: 20px;
   position: relative;
   word-wrap: break-word;
+  white-space: pre-wrap;
 }
 
 .message.user .bubble {
