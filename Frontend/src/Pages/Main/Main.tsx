@@ -70,7 +70,7 @@ const Main = () => {
           setMessages(prev => [...prev, explanationMessage, refactoredMessage, reasoningMessage]);
           setButtonStatus("success");
         } else if (error) {
-          const errorMessage = { type: 'bot', title: "Error", content: `**Error:** ${error}` };
+          const errorMessage = { type: 'bot', title: "Error", content: `${error}` };
           setMessages(prev => [...prev, errorMessage]);
           setButtonStatus("error");
         }
@@ -84,7 +84,7 @@ const Main = () => {
         err.response?.data?.error ||
         err.message ||
         "An unexpected error occurred. Please try again later.";
-      const errorMessage = { type: 'bot', title: "Error", content: `**Error:** ${errorMessageContent}` };
+      const errorMessage = { type: 'bot', title: "Error", content: `${errorMessageContent}` };
       setMessages(prev => [...prev, errorMessage]);
       setButtonStatus("error");
     } finally {
