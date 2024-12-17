@@ -127,7 +127,7 @@ const Main = () => {
                       <Button
                         variant="secondary"
                         size="sm"
-                        onClick={() => copyToClipboard(msg.content.split('```javascript\n')[1].split('\n```')[0])}
+                        onClick={() => copyToClipboard(msg.content)}
                         className={`copy-button ${buttonCopyStatus}`}
                         disabled={buttonCopyStatus === "loading"}
                       >
