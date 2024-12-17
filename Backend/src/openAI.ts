@@ -18,7 +18,8 @@ Rules:
 - The JSON should have the following keys: explanation, refactored_code, reasoning.
 - If the code is not valid, return only the error message in the JSON in the key "error". Only return the JSON, no other text or comments outside the JSON
 - If the code is invalid, incomplete, or non-functional, return a detailed error message explaining why the code cannot be processed in the 'error' key and no other content.
-  Ensure the error message is clear and looks like 'The provided code is incomplete and cannot be refactored due to missing functionality or syntax issues.'"
+  Ensure the error message is clear and looks like 'The provided code is incomplete and cannot be refactored due to missing functionality or syntax issues.
+- Dont return any other text or comments outside the JSON like the language of the code etc.
 `;
 
 if (!process.env.OPENAI_API_KEY) {
