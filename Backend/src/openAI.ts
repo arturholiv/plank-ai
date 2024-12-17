@@ -20,6 +20,7 @@ Rules:
 - If the code is invalid, incomplete, or non-functional, return a detailed error message explaining why the code cannot be processed in the 'error' key and no other content.
   Ensure the error message is clear and looks like 'The provided code is incomplete and cannot be refactored due to missing functionality or syntax issues.
 - Dont return any other text or comments outside the JSON like the language of the code etc.
+- Dont return any other text or comments inside the JSON like the language of the code etc.
 `;
 
 if (!process.env.OPENAI_API_KEY) {
