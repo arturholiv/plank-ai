@@ -8,7 +8,6 @@ import GitHub from '../../Component/Github/Github.tsx';
 const Main = () => {
   const [code, setCode] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
   const [messages, setMessages] = useState<Array<{ type: string; title: string; content: string }>>([]);
   const [buttonStatus, setButtonStatus] = useState("default");
   const [buttonCopyStatus, setButtonCopyStatus] = useState("default");
@@ -51,7 +50,6 @@ const Main = () => {
     const userMessage = { type: 'user', title: "", content: code };
     setMessages(prev => [...prev, userMessage]);
     setLoading(true);
-    setError(null);
     setButtonStatus("loading");
 
     try {
