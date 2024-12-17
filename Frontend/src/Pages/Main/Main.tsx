@@ -65,7 +65,7 @@ const Main = () => {
 
         if (explanation && refactored_code && reasoning) {
           const explanationMessage = { type: 'bot', title: "Explanation", content: `\n${explanation}` };
-          const refactoredMessage = { type: 'bot', title: "Refactored Code", content: `*\n\`\`\`javascript\n${refactored_code}\n\`\`\`` };
+          const refactoredMessage = { type: 'bot', title: "Refactored Code", content: `${refactored_code}` };
           const reasoningMessage = { type: 'bot', title: "Reasoning", content: `\n${reasoning}` };
           setMessages(prev => [...prev, explanationMessage, refactoredMessage, reasoningMessage]);
           setButtonStatus("success");
