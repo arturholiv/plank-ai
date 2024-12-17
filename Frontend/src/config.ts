@@ -1,4 +1,3 @@
-//const API_URL = 'http://localhost:8080';
-const API_URL = 'https://backend-spring-night-2532.fly.dev';
+const API_URL = 'http://localhost:8080';
 
 export default API_URL;
