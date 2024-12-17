@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import './Main.css';
 import API_URL from '../../config.ts';
 import GitHub from '../../Component/Github/Github.tsx';
@@ -12,6 +12,7 @@ const Main = () => {
   const [buttonStatus, setButtonStatus] = useState("default");
   const [buttonCopyStatus, setButtonCopyStatus] = useState("default");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [showPresentation, setShowPresentation] = useState(true);
 
   useEffect(() => {
     const storedMessages = localStorage.getItem('chatMessages');
@@ -26,19 +27,25 @@ const Main = () => {
   }, [messages]);
 
   useEffect(() => {
-    const message1 = { type: 'bot', title: "", content: "Hello." };
-    const message2 = { type: 'bot', title: "", content: "This is the Plank AI test. Made by ArturHoliv." };
-    const message3 = { type: 'bot', title: "", content: "Feel free to paste your code here and get a refactored version of it." };
+    if (showPresentation) {
+      const message1 = { type: 'bot', title: "", content: "Hello." };
+      const message2 = { type: 'bot', title: "", content: "This is the Plank AI test. Made by Artur H. Oliveira." };
+      const message3 = { type: 'bot', title: "", content: "Feel free to paste your code here and get a refactored version of it." };
+  
+      const timer1 = setTimeout(() => setMessages(prev => [...prev, message1]), 1000);
+      const timer2 = setTimeout(() => setMessages(prev => [...prev, message2]), 2000);
+      const timer3 = setTimeout(() => setMessages(prev => [...prev, message3]), 3000);
+  
+      setShowPresentation(false);
 
-    const timer1 = setTimeout(() => setMessages(prev => [...prev, message1]), 1000);
-    const timer2 = setTimeout(() => setMessages(prev => [...prev, message2]), 2000);
-    const timer3 = setTimeout(() => setMessages(prev => [...prev, message3]), 3000);
+      return () => {
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+        clearTimeout(timer3);
+      };
 
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
-    };
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const scrollToBottom = () => {
