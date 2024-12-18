@@ -38,11 +38,12 @@ Frontend
 https://github.com/arturholiv/plank-ai
 
 ## Deploy
-
-I also deployed the project on:
+I wanted to make the project available to be accessed from any device so i deployed the project on:
 
 https://plankai.arturholiv.com.br/
 
 And i will be adding some new features to it on:
 
 https://plankaiv2.arturholiv.com.br/
+
+Both versions are mobile responsive and the backend is the same for both versions.
