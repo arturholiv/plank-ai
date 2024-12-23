@@ -1,94 +1,108 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import './Main.css';
 import API_URL from '../../config.ts';
 import GitHub from '../../Component/Github/Github.tsx';
-import { RiCloseCircleFill } from 'react-icons/ri';
 
 const Main = () => {
   const [code, setCode] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [explanation, setExplanation] = useState<string | null>(null);
-  const [refactoredCode, setRefactoredCode] = useState<string | null>(null);
-  const [reasoning, setReasoning] = useState<string | null>(null);
+  const [messages, setMessages] = useState<Array<{ type: string; title: string; content: string }>>([]);
   const [buttonStatus, setButtonStatus] = useState("default");
   const [buttonCopyStatus, setButtonCopyStatus] = useState("default");
-  const [response, setResponse] = useState<string | null>(null);
-  const [showResponse, setShowResponse] = useState<boolean>(false);
-  const [errorStatus, setErrorStatus] = useState<number | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const storedMessages = localStorage.getItem('chatMessages');
+    if (storedMessages) {
+      setMessages(JSON.parse(storedMessages));
+    }
+
+    const presentationSent = localStorage.getItem('presentationSent');
+    if (!presentationSent) {
+      const message1 = { type: 'bot', title: "", content: "Hello." };
+      const message2 = { type: 'bot', title: "", content: "This is the Plank AI test. Made by Artur H. Oliveira." };
+      const message3 = { type: 'bot', title: "", content: "Feel free to paste your code here and get a refactored version of it." };
+
+      const timer1 = setTimeout(() => setMessages(prev => [...prev, message1]), 1000);
+      const timer2 = setTimeout(() => setMessages(prev => [...prev, message2]), 2000);
+      const timer3 = setTimeout(() => setMessages(prev => [...prev, message3]), 3000);
+
+      localStorage.setItem('presentationSent', 'true');
+
+      return () => {
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+        clearTimeout(timer3);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('chatMessages', JSON.stringify(messages));
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   const handleSubmit = async () => {
+    if (code.trim() === '') return;
+    const userMessage = { type: 'user', title: "", content: code };
+    setMessages(prev => [...prev, userMessage]);
     setLoading(true);
-    setError(null);
     setButtonStatus("loading");
-    setExplanation(null);
-    setRefactoredCode(null);
-    setReasoning(null);
-    setResponse(null);
-    setShowResponse(false);
 
     try {
       const response = await axios.post(`${API_URL}/codeEnhancement`, { code });
-  
+
       if (response.data?.result) {
-        const resultString = response.data.result.trim(); 
+        const resultString = response.data.result.trim();
         const resultJson = JSON.parse(resultString);
-  
+
         const { explanation, refactored_code, reasoning, error } = resultJson;
-  
+
         if (explanation && refactored_code && reasoning) {
-          setShowResponse(true);
-          setRefactoredCode(refactored_code);
-          setExplanation(explanation);
-          setReasoning(reasoning);
+          const explanationMessage = { type: 'bot', title: "Explanation", content: `\n${explanation}` };
+          const refactoredMessage = { type: 'bot', title: "Refactored Code", content: `${refactored_code}` };
+          const reasoningMessage = { type: 'bot', title: "Reasoning", content: `\n${reasoning}` };
+          setMessages(prev => [...prev, explanationMessage, refactoredMessage, reasoningMessage]);
           setButtonStatus("success");
         } else if (error) {
-          setResponse(error);
-          setShowResponse(true);
+          const errorMessage = { type: 'bot', title: "Error", content: `${error}` };
+          setMessages(prev => [...prev, errorMessage]);
           setButtonStatus("error");
         }
       } else {
-        setResponse("No result returned from the server.");
-        setShowResponse(true);
+        const noResultMessage = { type: 'bot', title: "Error", content: "No result returned from the server." };
+        setMessages(prev => [...prev, noResultMessage]);
         setButtonStatus("error");
       }
     } catch (err: any) {
-      const errorMessage = 
-        err.response?.data?.error || 
-        err.message || 
+      const errorMessageContent =
+        err.response?.data?.error ||
+        err.message ||
         "An unexpected error occurred. Please try again later.";
-      const errorStatus = err.response?.status || 500;
-      setErrorStatus(errorStatus);
-      setError(errorMessage);
+      const errorMessage = { type: 'bot', title: "Error", content: `${errorMessageContent}` };
+      setMessages(prev => [...prev, errorMessage]);
       setButtonStatus("error");
     } finally {
       setTimeout(() => setButtonStatus("default"), 5000);
       setLoading(false);
+      setCode('');
     }
   };
 
-  const copyToClipboard = () => {
-    if (refactoredCode) {
-      navigator.clipboard.writeText(refactoredCode);
-      setButtonCopyStatus("success");
-      setTimeout(() => setButtonCopyStatus("default"), 2500);
-    }
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setButtonCopyStatus("success");
+    setTimeout(() => setButtonCopyStatus("default"), 2500);
   };
-
-  const closeResponse = () => {
-    setError(null);
-    setExplanation(null);
-    setRefactoredCode(null);
-    setReasoning(null);
-    setResponse(null);
-    setShowResponse(false);
-    setCode("");
-  }
 
   return (
-    <Container>
+    <Container fluid className="container">
       <Row className="mt-4">
         <Col>
           <h1>Plank AI</h1>
@@ -96,16 +110,48 @@ const Main = () => {
         </Col>
       </Row>
       <Row className="mt-3">
-        <Col>
-          <Form>
-            <Form.Group className="codeInput">
-              <Form.Label>Enter your code to be explained and refactored</Form.Label>
+        <Col className="d-flex justify-content-center">
+          <div className="chat-container">
+            <div className="messages">
+              {messages.map((msg, index) => (
+                <div key={index} className={`message ${msg.type}`}>
+                  <div className="bubble">
+                    <strong className="message-title">{msg.title}</strong>
+                    {msg.title === "Refactored Code" ? 
+                    <div className="refactoredCode ">
+                      {msg.content}
+                    </div> : 
+                    <div className="message-content">
+                      {msg.content}
+                    </div>}
+                    {msg.title === "Refactored Code" && (
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => copyToClipboard(msg.content)}
+                        className={`copy-button ${buttonCopyStatus}`}
+                        disabled={buttonCopyStatus === "loading"}
+                      >
+                        {buttonCopyStatus === "success" ? "Copied!" : "Copy"}
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              ))}
+              <div ref={messagesEndRef} />
+            </div>
+            <div className="input-container">
               <Form.Control
-                className="form-control"
                 as="textarea"
-                rows={6}
                 value={code}
+                rows={3}
                 onChange={(e) => setCode(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSubmit();
+                  }
+                }}
                 placeholder="Paste your code here..."
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && !e.shiftKey) {
@@ -114,144 +160,40 @@ const Main = () => {
                   }
                 }}
               />
-            </Form.Group>
-            <Button
+              <Button
                 variant="primary"
                 onClick={handleSubmit}
                 disabled={loading || code.length === 0}
-                className={`d-flex align-items-center justify-content-center ${buttonStatus}`}
+                className={`submit-button ${buttonStatus}`}
                 style={{
-                    marginTop: "20px",
-                    borderRadius: "27px",
-                    fontWeight: "bold",
-                    transition: "all 0.3s ease",
-                    backgroundColor:
-                        buttonStatus === "success"
-                            ? "#4CBB17"
-                            : buttonStatus === "error"
-                            ? "red"
-                            : "",
-                    borderColor:
-                        buttonStatus === "success"
-                            ? "#4CBB17"
-                            : buttonStatus === "error"
-                            ? "red"
-                            : "",
-                    borderWidth: "2px",
-                    borderStyle: "solid",
-                    animation:
-                        buttonStatus === "success" ||
-                        buttonStatus === "error"
-                            ? "borderShrink 4s linear"
-                            : "none",
-              }}
-            >
-            {loading ? (
-                "Loading..."
-            ) : buttonStatus === "success" ? (
-                "Success!"
-            ) : buttonStatus === "error" ? (
-                "Error processing code"
-            ) : (
-                "Submit"
-            )}
-            </Button>
-          </Form>
+                  backgroundColor:
+                    buttonStatus === "success"
+                      ? "#4CBB17"
+                      : buttonStatus === "error"
+                        ? "red"
+                        : "",
+                  borderColor:
+                    buttonStatus === "success"
+                      ? "#4CBB17"
+                      : buttonStatus === "error"
+                        ? "red"
+                        : "",
+                }}
+              >
+                {loading ? (
+                  "Loading..."
+                ) : buttonStatus === "success" ? (
+                  "Success!"
+                ) : buttonStatus === "error" ? (
+                  "Error"
+                ) : (
+                  "Submit"
+                )}
+              </Button>
+            </div>
+          </div>
         </Col>
       </Row>
-      {error && (
-        <div className="error-container">
-            <div>
-                <Button className="closeButton" onClick={closeResponse}>
-                    <RiCloseCircleFill className="closeIcon" />
-                </Button>
-            </div>
-            <Row className="mt-3">
-                <h4 className="error-title">Error: {errorStatus}</h4>
-                <Col>
-                    <Alert variant="danger" className="error-message">{error}</Alert>
-                </Col>
-            </Row>
-        </div>
-      )}
-      { showResponse && (
-        <div className="codeResult">
-        <div>
-            <Button className="closeButton" onClick={closeResponse}>
-                <RiCloseCircleFill className="closeIcon" />
-            </Button>
-        </div>
-          {explanation && (
-            <Row className="mt-4 response">
-            <Col>
-              <h4>Explanation</h4>
-              <div>{explanation}</div>
-            </Col>
-          </Row>
-        )}
-        {refactoredCode && (
-          <Row className="mt-4">
-            <Col>
-              <h4>Refactored Code</h4>
-              <pre className="refactoredCode">{refactoredCode}</pre>
-              <Button
-                variant="primary"
-                onClick={copyToClipboard}
-                className={`d-flex align-items-center justify-content-center ${buttonCopyStatus}`}
-                style={{
-                    marginTop: "20px",
-                    borderRadius: "27px",
-                    fontWeight: "bold",
-                    transition: "all 0.3s ease",
-                    backgroundColor:
-                        buttonCopyStatus === "success"
-                            ? "#4CBB17"
-                            : buttonCopyStatus === "error"
-                            ? "red"
-                            : "",
-                    borderColor:
-                        buttonCopyStatus === "success"
-                            ? "#4CBB17"
-                            : buttonCopyStatus === "error"
-                            ? "red"
-                            : "",
-                    borderWidth: "2px",
-                    borderStyle: "solid",
-                    animation:
-                        buttonCopyStatus === "success" ||
-                        buttonCopyStatus === "error"
-                            ? "borderShrink 4s linear"
-                            : "none",
-              }}>
-                {buttonCopyStatus === "success" ? (
-                    "Copied!"
-                ) : buttonCopyStatus === "error" ? (
-                    "Error copying"
-                ) : (
-                    "Copy"
-                )}
-            </Button>
-            </Col>
-          </Row>
-        )}
-        {reasoning && (
-          <Row className="mt-4 response">
-            <Col>
-              <h4>Reasoning</h4>
-              <div>{reasoning}</div>
-            </Col>
-          </Row>
-        )}
-        {response && (
-          <Row className="mt-4">
-            <Col>
-              <h4 className="error-title">Something went wrong</h4>
-              <div className="error-message">{response}</div>
-            </Col>
-          </Row>
-        )}
-      </div>
-      )}
       <GitHub />
     </Container>
   );
